@@ -1,0 +1,4 @@
+include requirements.txt
+include LICENSE
+include README.rst
+global-exclude *.orig *.pyc *.log *.swp local_settings.py
