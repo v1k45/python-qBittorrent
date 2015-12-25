@@ -42,6 +42,7 @@ class Client(object):
     def _request(self, endpoint, method, data=None, **kwargs):
         """
         Method to hanle both GET and POST requests.
+
         :param endpoint: Endpoint of the API.
         :param method: Method of HTTP request.
         :param data: POST DATA for the request.
@@ -129,6 +130,7 @@ class Client(object):
                  reverse=False, limit=10, offset=0):
         """
         Returns a list of torrents matching the supplied filters.
+
         :param status: Current status of the torrents.
         :param label: Fetch all torrents with the supplied label.
         :param sort: Sort torrents by.
@@ -158,6 +160,7 @@ class Client(object):
     def get_torrent(self, infohash):
         """
         Get details of the torrent.
+
         :param infohash: INFO HASH of the torrent.
         """
         return self._get('query/propertiesGeneral/' + infohash.lower())
@@ -165,6 +168,7 @@ class Client(object):
     def get_torrent_trackers(self, infohash):
         """
         Get trackers for the torrent.
+
         :param infohash: INFO HASH of the torrent.
         """
         return self._get('query/propertiesTrackers/' + infohash.lower())
@@ -172,6 +176,7 @@ class Client(object):
     def get_torrent_webseeds(self, infohash):
         """
         Get webseeds for the torrent.
+
         :param infohash: INFO HASH of the torrent.
         """
         return self._get('query/propertiesWebSeeds/' + infohash.lower())
@@ -179,6 +184,7 @@ class Client(object):
     def get_torrent_files(self, infohash):
         """
         Get list of files for the torrent.
+
         :param infohash: INFO HASH of the torrent.
         """
         return self._get('query/propertiesFiles/' + infohash.lower())
@@ -208,6 +214,7 @@ class Client(object):
                            save_path=None, label=''):
         """
         Download torrent using a link.
+
         :param link: Single link (can be condensed).
         :param link_list: Python list of links.
         :param save_path: Path to download the torrent.
@@ -230,6 +237,7 @@ class Client(object):
                            save_path=None, label=''):
         """
         Download torrent using a file.
+
         :param file_buffer: Single file() buffer.
         :param file_buffer_list: Python list of file() buffers.
         :param save_path: Path to download the torrent.
@@ -253,6 +261,7 @@ class Client(object):
     def add_trackers(self, infohash, trackers):
         """
         Add trackers to a torrent.
+
         :param infohash: INFO HASH of torrent.
         :param trackers: Trackers.
         """
@@ -264,6 +273,7 @@ class Client(object):
     def process_infohash_list(infohash_list):
         """
         Method to convert the infohash_list to qBittorrent API friendly values.
+
         :param infohash_list: List of infohash.
         """
         if isinstance(infohash_list, list):
@@ -275,6 +285,7 @@ class Client(object):
     def pause(self, infohash):
         """
         Pause a torrent.
+
         :param infohash: INFO HASH of torrent.
         """
         return self._post('command/pause', data={'hash': infohash.lower()})
@@ -288,6 +299,7 @@ class Client(object):
     def pause_multiple(self, infohash_list):
         """
         Pause all torrents.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -296,6 +308,7 @@ class Client(object):
     def resume(self, infohash):
         """
         Resume a paused torrent.
+
         :param infohash: INFO HASH of torrent.
         """
         return self._post('command/resume', data={'hash': infohash.lower()})
@@ -309,6 +322,7 @@ class Client(object):
     def resume_multiple(self, infohash_list):
         """
         Resume all paused torrents.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -317,6 +331,7 @@ class Client(object):
     def delete(self, infohash_list):
         """
         Delete torrents.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -325,6 +340,7 @@ class Client(object):
     def delete_permanently(self, infohash_list):
         """
         Permanently delete torrents.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -333,6 +349,7 @@ class Client(object):
     def recheck(self, infohash_list):
         """
         Recheck torrents.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -341,6 +358,7 @@ class Client(object):
     def increase_priority(self, infohash_list):
         """
         Increase priority of torrents.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -349,6 +367,7 @@ class Client(object):
     def decrease_priority(self, infohash_list):
         """
         Decrease priority of torrents.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -357,6 +376,7 @@ class Client(object):
     def set_max_priority(self, infohash_list):
         """
         Set torrents to maximum priority level.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -365,6 +385,7 @@ class Client(object):
     def set_min_priority(self, infohash_list):
         """
         Set torrents to minimum priority level.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -373,6 +394,7 @@ class Client(object):
     def set_file_priority(self, infohash, file_id, priority):
         """
         Set file of a torrent to a supplied priority level.
+
         :param infohash: INFO HASH of torrent.
         :param file_id: ID of the file to set priority.
         :param priority: Priority level of the file.
@@ -398,6 +420,7 @@ class Client(object):
     def set_global_download_limit(self, limit):
         """
         Set global download speed limit.
+
         :param limit: Speed limit in bytes.
         """
         return self._post('command/setGlobalDlLimit', data={'limit': limit})
@@ -411,6 +434,7 @@ class Client(object):
     def set_global_upload_limit(self, limit):
         """
         Set global upload speed limit.
+
         :param limit: Speed limit in bytes.
         """
         return self._post('command/setGlobalUpLimit', data={'limit': limit})
@@ -419,6 +443,7 @@ class Client(object):
     def get_torrent_download_limit(self, infohash_list):
         """
         Get download speed limit of the supplied torrents.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -438,6 +463,7 @@ class Client(object):
     def get_torrent_upload_limit(self, infohash_list):
         """
         Get upoload speed limit of the supplied torrents.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -480,6 +506,7 @@ class Client(object):
     def toggle_sequential_download(self, infohash_list):
         """
         Toggle sequential download in supplied torrents.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -488,6 +515,7 @@ class Client(object):
     def toggle_first_last_piece_priority(self, infohash_list):
         """
         Toggle first/last piece priority of supplied torrents.
+
         :param infohash_list: Single or list() of infohashes.
         """
         data = self.process_infohash_list(infohash_list)
@@ -496,6 +524,7 @@ class Client(object):
     def force_start(self, infohash_list, value=True):
         """
         Force start selected torrents.
+
         :param infohash_list: Single or list() of infohashes.
         :param value: Force start value (bool)
         """
