@@ -2,7 +2,7 @@
 Getting started
 ===============
 Python wrapper for qBittorrent Web API (for versions above v3.1.x)
-For qBittorents client with earlier versions, use mookfist's `python-qbittorrent <https://github.com/mookfist/python-qbittorrent>`__.
+For qBittorrent clients with earlier versions, use mookfist's `python-qbittorrent <https://github.com/mookfist/python-qbittorrent>`__.
 
 This wrapper is based on the methods described in `qBittorrent's Official Web API Documentation <https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-Documentation>`__
 
