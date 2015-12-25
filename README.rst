@@ -1,6 +1,11 @@
 ==================
 python-qBittorrent
 ==================
+
+.. image:: https://readthedocs.org/projects/python-qbittorrent/badge/?version=latest
+   :target: http://python-qbittorrent.readthedocs.org/en/latest/?badge=latest
+   :alt: Documentation Status
+
 Python wrapper for qBittorrent Web API (for versions above v3.1.x).
 
 For qBittorents client with earlier versions, use mookfist's `python-qbittorrent <https://github.com/mookfist/python-qbittorrent>`__.
@@ -11,7 +16,8 @@ Some methods are only supported in qBittorent's latest version (v3.3.1 when writ
 
 Quick usage guide
 =================
-::
+.. code-block:: python
+
     from qbittorrent import Client
 
     qb = Client('http://127.0.0.1:8080/')
@@ -111,7 +117,10 @@ Pause / Resume torrents
     qb.resume_multipe(info_hash_list)
 
 
-All API are mentioned in Read the docs.
+Full API method documentation
+=============================
+
+All API methods of qBittorent are mentioned @ `Read the docs <http://python-qbittorrent.readthedocs.org/en/latest/?badge=latest>`__
 
 Authors
 =======
