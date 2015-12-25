@@ -1,8 +1,9 @@
 import os
 from setuptools import setup, find_packages
-import qbittorrent
 
 install_requires = open('requirements.txt').read().splitlines()
+
+__version__ = '0.1.2'
 
 
 def read(fname):
@@ -15,7 +16,7 @@ def read(fname):
 setup(
     name='python-qbittorrent',
     description='Python wrapper for qBittorrent >3.1.x',
-    version=qbittorrent.__version__,
+    version=__version__,
     long_description=read('README.rst'),
     license='The MIT License',
     platforms=['OS Independent'],
