@@ -14,6 +14,19 @@ This wrapper is based on the methods described in `qBittorrent's Official Web AP
 
 Some methods are only supported in qBittorent's latest version (v3.3.1 when writing), It'll be best if you upgrade your client to a latest version.
 
+Installation
+============
+
+The best way is to install a stable release from PyPI::
+
+    $ pip install python-qbittorrent
+
+You can also stay on the bleeding edge of the package::
+
+    $ git clone https://github.com/v1k45/python-qBittorrent.git
+    $ cd python-qBittorrent
+    $ python setup.py install
+
 Quick usage guide
 =================
 .. code-block:: python
