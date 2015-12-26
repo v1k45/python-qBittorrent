@@ -10,9 +10,9 @@ class LoginRequired(Exception):
 class Client(object):
     """class to interact with qBittorrent WEB API"""
     def __init__(self, url):
-        self.url = url
         if not url.endswith('/'):
-            self.url = url + '/'
+            url += '/'
+        self.url = url
 
         self._is_authenticated = False
 
