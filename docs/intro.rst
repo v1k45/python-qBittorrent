@@ -65,7 +65,7 @@ Downloading torrents
 - Download torrents by link::
 
     magnet_link = "magnet:?xt=urn:btih:e334ab9ddd91c10938a7....."
-    qb.download_from_link(link=magnet_link)
+    qb.download_from_link(magnet_link)
 
     # No matter the link is correct or not,
     # method will always return empty JSON object.
@@ -73,32 +73,32 @@ Downloading torrents
 - Download multipe torrents by list of links::
 
     link_list = [link1, link2, link3]
-    qb.download_from_link(link_list=link_list)
+    qb.download_from_link(link_list)
 
 - Downloading torrents by file::
 
     torrent_file = open('my-torrent-file.torrent')
-    qb.download_from_file(file_buffer=torrent_file)
+    qb.download_from_file(torrent_file)
 
 - Downloading multiple torrents by using files::
 
     torrent_file_list = [open('1.torrent'), open('2.torrent')]
-    qb.download_from_file(file_buffer_list=torrent_file_list)
+    qb.download_from_file(torrent_file_list)
 
 - Specifing save path for downloads::
 
     dl_path = '/home/user/Downloads/special-dir/'
-    qb.download_from_file(file_buffer=myfile, save_path=dl_path)
+    qb.download_from_file(myfile, save_path=dl_path)
 
     # same for links.
-    qb.download_from_link(link=my_magnet_uri, save_path=dl_path)
+    qb.download_from_link(my_magnet_uri, save_path=dl_path)
 
 - Applying labels to downloads::
 
-    qb.download_from_file(file_buffer=myfile, label='secret-files ;) ')
+    qb.download_from_file(myfile, label='secret-files ;) ')
 
     # same for links.
-    qb.download_from_link(link=my_magnet_uri, label='anime')
+    qb.download_from_link(my_magnet_uri, label='anime')
 
 Pause / Resume torrents
 -----------------------
@@ -123,9 +123,3 @@ Pause / Resume torrents
     qb.pause_multiple(info_hash_list)
     qb.resume_multipe(info_hash_list)
 
-
-Authors
-=======
-
-- `Vikas Yadav <https://www.github.com/v1k45/>`__
-- Your name here :)
