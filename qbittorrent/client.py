@@ -210,21 +210,20 @@ class Client(object):
         """
         return self._get('sync/maindata', params={'rid': rid})
 
-    def download_from_link(self, link='', link_list=[],
+    def download_from_link(self, link,
                            save_path=None, label=''):
         """
         Download torrent using a link.
 
-        :param link: Single link (can be condensed).
-        :param link_list: Python list of links.
+        :param link: URL Link or list of.
         :param save_path: Path to download the torrent.
         :param label: Label of the torrent(s).
 
         :return: Empty JSON data.
         """
-
-        links = link or '\n'.join(link_list)
-        data = {'urls': links}
+        if not isinstance(link, list):
+            link = [link]
+        data = {'urls': link}
 
         if save_path:
             data.update({'savepath': save_path})
@@ -233,22 +232,20 @@ class Client(object):
 
         return self._post('command/download', data=data)
 
-    def download_from_file(self, file_buffer=b'', file_buffer_list=[],
+    def download_from_file(self, file_buffer,
                            save_path=None, label=''):
         """
         Download torrent using a file.
 
-        :param file_buffer: Single file() buffer.
-        :param file_buffer_list: Python list of file() buffers.
+        :param file_buffer: Single file() buffer or list of.
         :param save_path: Path to download the torrent.
         :param label: Label of the torrent(s).
 
         :return: Empty JSON data.
         """
-        if file_buffer:
-            torrent_files = {'torrents': file_buffer}
-        elif file_buffer_list:
-            torrent_files = [{'torrents': f} for f in file_buffer_list]
+        if not isinstance(file_buffer, list):
+            file_buffer = [file_buffer]
+        torrent_files = [{'torrents': f} for f in file_buffer]
 
         data = {}
 
