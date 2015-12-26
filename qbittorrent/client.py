@@ -102,19 +102,22 @@ class Client(object):
         self._is_authenticated = False
         return self._post('logout', data={})
 
-    def get_qbittorrent_version(self):
+    @property
+    def qbittorrent_version(self):
         """
         Get qBittorrent version.
         """
         return self._get('version/qbittorrent')
 
-    def get_api_version(self):
+    @property
+    def api_version(self):
         """
         Get WEB API version.
         """
         return self._get('version/api')
 
-    def get_api_min_version(self):
+    @property
+    def api_min_version(self):
         """
         Get minimum WEB API version.
         """
@@ -189,12 +192,14 @@ class Client(object):
         """
         return self._get('query/propertiesFiles/' + infohash.lower())
 
+    @property
     def global_transfer_info(self):
         """
         Get JSON data of the global transfer info of qBittorrent.
         """
         return self._get('query/transferInfo')
 
+    @property
     def preferences(self):
         """
         Get all the current qBittorrent preferences.
@@ -295,7 +300,7 @@ class Client(object):
 
     def pause_multiple(self, infohash_list):
         """
-        Pause all torrents.
+        Pause multiple torrents.
 
         :param infohash_list: Single or list() of infohashes.
         """
@@ -318,7 +323,7 @@ class Client(object):
 
     def resume_multiple(self, infohash_list):
         """
-        Resume all paused torrents.
+        Resume multiple paused torrents.
 
         :param infohash_list: Single or list() of infohashes.
         """
@@ -408,6 +413,7 @@ class Client(object):
         return self._post('command/setFilePrio', data=data)
 
     # Get-set global download and upload speed limits.
+
     def get_global_download_limit(self):
         """
         Get global download speed limit.
@@ -422,6 +428,9 @@ class Client(object):
         """
         return self._post('command/setGlobalDlLimit', data={'limit': limit})
 
+    global_download_limit = property(get_global_download_limit,
+                                     set_global_download_limit)
+
     def get_global_upload_limit(self):
         """
         Get global upload speed limit.
@@ -435,6 +444,9 @@ class Client(object):
         :param limit: Speed limit in bytes.
         """
         return self._post('command/setGlobalUpLimit', data={'limit': limit})
+
+    global_upload_limit = property(get_global_upload_limit,
+                                   set_global_upload_limit)
 
     # Get-set download and upload speed limits of the torrents.
     def get_torrent_download_limit(self, infohash_list):
@@ -493,6 +505,8 @@ class Client(object):
         Get Alternative speed limits. (1/0)
         """
         return self._get('command/alternativeSpeedLimitsEnabled')
+
+    alternative_speed_status = property(get_alternative_speed_status)
 
     def toggle_alternative_speed(self):
         """
