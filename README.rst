@@ -158,4 +158,3 @@ TODO
 ====
 
 - Write tests
-- Consider use of properties
