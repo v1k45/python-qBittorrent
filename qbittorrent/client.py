@@ -202,9 +202,62 @@ class Client(object):
     @property
     def preferences(self):
         """
-        Get all the current qBittorrent preferences.
+        Get the current qBittorrent preferences.
+        Can also be used to assign individual preferences.
+        For setting multiple preferences at once,
+        see ``set_preferences`` method.
+
+        Note: Even if this is a ``property``,
+        to fetch the current preferences dict, you are required
+        to call it like a bound method.
+
+        Wrong::
+
+            qb.preferences
+
+        Right::
+
+            qb.preferences()
+
         """
-        return self._get('query/preferences')
+        prefs = self._get('query/preferences')
+
+        class Proxy(Client):
+            """
+            Proxy class to to allow assignment of individual preferences.
+            this class overrides some methods to ease things.
+
+            Because of this, settings can be assigned like::
+
+                In [5]: prefs = qb.preferences()
+
+                In [6]: prefs['autorun_enabled']
+                Out[6]: True
+
+                In [7]: prefs['autorun_enabled'] = False
+
+                In [8]: prefs['autorun_enabled']
+                Out[8]: False
+
+            """
+
+            def __init__(self, url, prefs, auth, session):
+                super(Proxy, self).__init__(url)
+                self.prefs = prefs
+                self._is_authenticated = auth
+                self.session = session
+
+            def __getitem__(self, key):
+                return self.prefs[key]
+
+            def __setitem__(self, key, value):
+                kwargs = {key: value}
+                return self.set_preferences(**kwargs)
+
+            def __call__(self):
+                return self.prefs
+
+        return Proxy(self.url, prefs, self._is_authenticated, self.session)
 
     def sync(self, rid=0):
         """
@@ -497,8 +550,10 @@ class Client(object):
 
         :param kwargs: set preferences in kwargs form.
         """
-        json_data = {'json': json.dumps(kwargs)}
-        return self._post('command/setPreferences', data=json_data)
+        json_data = "json={}".format(json.dumps(kwargs))
+        headers = {'content-type': 'application/x-www-form-urlencoded'}
+        return self._post('command/setPreferences', data=json_data,
+                          headers=headers)
 
     def get_alternative_speed_status(self):
         """
