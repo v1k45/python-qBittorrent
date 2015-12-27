@@ -6,9 +6,6 @@ python-qBittorrent
    :target: http://python-qbittorrent.readthedocs.org/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://img.shields.io/pypi/dm/python-qbittorrent.svg
-   :target: https://pypi.python.org/pypi/python-qbittorrent
-
 .. image:: https://badge.fury.io/py/python-qbittorrent.svg
    :target: https://badge.fury.io/py/python-qbittorrent
 
@@ -19,6 +16,7 @@ For qBittorrent clients with earlier versions, use *mookfist's* `python-qbittorr
 This wrapper is based on the methods described in `qBittorrent's Official Web API Documentation <https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-Documentation>`__
 
 Some methods are only supported in qBittorent's latest version (v3.3.1 when writing).
+
 It'll be best if you upgrade your client to a latest version.
 
 Installation
