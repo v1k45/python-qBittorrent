@@ -41,6 +41,7 @@ Quick usage guide
     qb = Client('http://127.0.0.1:8080/')
 
     qb.login('admin', 'your-secret-password')
+    # not required when 'Bypass from localhost' setting is active.
     # defaults to admin:admin.
     # to use defaults, just do qb.login()
 
