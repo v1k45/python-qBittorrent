@@ -14,7 +14,13 @@ class Client(object):
             url += '/'
         self.url = url
 
-        self._is_authenticated = False
+        session = requests.Session()
+        check_prefs = session.get(url+'query/preferences')
+        if check_prefs.status_code == 200:
+            self._is_authenticated = True
+            self.session = session
+        else:
+            self._is_authenticated = False
 
     def _get(self, endpoint, **kwargs):
         """
@@ -99,8 +105,9 @@ class Client(object):
         """
         Logout the current session.
         """
+        response = self._get('logout')
         self._is_authenticated = False
-        return self._post('logout', data={})
+        return response
 
     @property
     def qbittorrent_version(self):
