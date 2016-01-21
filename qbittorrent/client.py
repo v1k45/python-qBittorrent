@@ -308,9 +308,13 @@ class Client(object):
 
         :return: Empty JSON data.
         """
-        if not isinstance(file_buffer, list):
-            file_buffer = [file_buffer]
-        torrent_files = [{'torrents': f} for f in file_buffer]
+        if isinstance(file_buffer, list):
+            torrent_files = {}
+            for i, f in enumerate(file_buffer):
+                torrent_files.update({'torrents%s' % i: f})
+            print torrent_files
+        else:
+            torrent_files = {'torrents': file_buffer}
 
         data = {}
 
