@@ -77,12 +77,12 @@ Downloading torrents
 
 - Downloading torrents by file::
 
-    torrent_file = open('my-torrent-file.torrent')
+    torrent_file = open('my-torrent-file.torrent', 'rb')
     qb.download_from_file(torrent_file)
 
 - Downloading multiple torrents by using files::
 
-    torrent_file_list = [open('1.torrent'), open('2.torrent')]
+    torrent_file_list = [open('1.torrent', 'rb'), open('2.torrent', 'rb')]
     qb.download_from_file(torrent_file_list)
 
 - Specifing save path for downloads::
