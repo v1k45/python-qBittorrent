@@ -606,5 +606,5 @@ class Client(object):
         :param value: Force start value (bool)
         """
         data = self.process_infohash_list(infohash_list)
-        data.update({'value': value})
+        data.update({'value': json.dumps(value)})
         return self._post('command/setForceStart', data=data)
