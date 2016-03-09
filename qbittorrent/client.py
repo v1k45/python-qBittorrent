@@ -370,6 +370,17 @@ class Client(object):
         """
         data = self.process_infohash_list(infohash_list)
         return self._post('command/pauseAll', data=data)
+		
+    def set_label(self, infohash_list, label):
+        """
+        Set the label on multiple torrents.
+
+        :param infohash_list: Single or list() of infohashes.
+        """
+        data = self.process_infohash_list(infohash_list)
+        data['label'] = label
+
+        return self._post('command/setLabel', data=data)
 
     def resume(self, infohash):
         """
