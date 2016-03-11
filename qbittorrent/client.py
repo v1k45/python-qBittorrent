@@ -16,9 +16,19 @@ class Client(object):
 
         session = requests.Session()
         check_prefs = session.get(url+'query/preferences')
+
         if check_prefs.status_code == 200:
             self._is_authenticated = True
             self.session = session
+
+        elif check_prefs.status_code == 404:
+            self._is_authenticated = False
+            raise RuntimeError("""
+                This wrapper only supports qBittorrent applications
+                 with version higher than 3.1.x.
+                 Please use the latest qBittorrent release.
+                """)
+
         else:
             self._is_authenticated = False
 
@@ -370,7 +380,7 @@ class Client(object):
         """
         data = self.process_infohash_list(infohash_list)
         return self._post('command/pauseAll', data=data)
-		
+
     def set_label(self, infohash_list, label):
         """
         Set the label on multiple torrents.
