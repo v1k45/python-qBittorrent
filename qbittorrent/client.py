@@ -78,6 +78,7 @@ class Client(object):
             request = rq.post(final_url, data, **kwargs)
 
         request.raise_for_status()
+        request.encoding = 'utf_8'
 
         if len(request.text) == 0:
             data = json.loads('{}')
