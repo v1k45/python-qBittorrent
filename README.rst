@@ -122,15 +122,15 @@ Pause / Resume torrents
 
 - Pausing/ Resuming a speicific torrent::
 
-    info_hash = 'e334ab9ddd91c10938a7a87875aa5d7fff526cb4'
+    info_hash = 'e334ab9ddd....infohash....5d7fff526cb4'
     qb.pause(info_hash)
     qb.resume(info_hash)
 
 - Pausing/ Resuming multiple torrents::
 
-    info_hash_list = ['e334ab9ddd91c10938a7a87875aa5d7fff526cb4',
-                      'c9dc36f46d90b0e2f2bfe02ce9ac0f490ebebc46',
-                      '4c859243615b106652a6e989d71fdf58b1f20108']
+    info_hash_list = ['e334ab9ddd9......infohash......fff526cb4',
+                      'c9dc36f46d9......infohash......90ebebc46',
+                      '4c859243615......infohash......8b1f20108']
 
     qb.pause_multiple(info_hash_list)
     qb.resume_multipe(info_hash_list)
@@ -152,7 +152,11 @@ Maintainer
 Contributors
 ------------
 
+*By chronological order*
+
 - `Matt Smith (psykzz) <https://github.com/psykzz>`__
+- `Nicolas Wright (dozedoff) <https://github.com/dozedoff>`__
+- `sbivol <https://github.com/sbivol>`__
 - Your name here :)
 
 TODO
