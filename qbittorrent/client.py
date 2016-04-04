@@ -346,7 +346,7 @@ class Client(object):
         return self._post('command/addTrackers', data=data)
 
     @staticmethod
-    def process_infohash_list(infohash_list):
+    def _process_infohash_list(infohash_list):
         """
         Method to convert the infohash_list to qBittorrent API friendly values.
 
@@ -378,7 +378,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/pauseAll', data=data)
 
     def set_label(self, infohash_list, label):
@@ -387,7 +387,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         data['label'] = label
 
         return self._post('command/setLabel', data=data)
@@ -412,7 +412,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/resumeAll', data=data)
 
     def delete(self, infohash_list):
@@ -421,7 +421,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/delete', data=data)
 
     def delete_permanently(self, infohash_list):
@@ -430,7 +430,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/deletePerm', data=data)
 
     def recheck(self, infohash_list):
@@ -439,7 +439,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/recheck', data=data)
 
     def increase_priority(self, infohash_list):
@@ -448,7 +448,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/increasePrio', data=data)
 
     def decrease_priority(self, infohash_list):
@@ -457,7 +457,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/decreasePrio', data=data)
 
     def set_max_priority(self, infohash_list):
@@ -466,7 +466,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/topPrio', data=data)
 
     def set_min_priority(self, infohash_list):
@@ -475,7 +475,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/bottomPrio', data=data)
 
     def set_file_priority(self, infohash, file_id, priority):
@@ -540,7 +540,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/getTorrentsDlLimit', data=data)
 
     def set_torrent_download_limit(self, infohash_list, limit):
@@ -550,7 +550,7 @@ class Client(object):
         :param infohash_list: Single or list() of infohashes.
         :param limit: Speed limit in bytes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         data.update({'limit': limit})
         return self._post('command/setTorrentsDlLimit', data=data)
 
@@ -560,7 +560,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/getTorrentsUpLimit', data=data)
 
     def set_torrent_upload_limit(self, infohash_list, limit):
@@ -570,7 +570,7 @@ class Client(object):
         :param infohash_list: Single or list() of infohashes.
         :param limit: Speed limit in bytes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         data.update({'limit': limit})
         return self._post('command/setTorrentsUpLimit', data=data)
 
@@ -607,7 +607,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/toggleSequentialDownload', data=data)
 
     def toggle_first_last_piece_priority(self, infohash_list):
@@ -616,7 +616,7 @@ class Client(object):
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         return self._post('command/toggleFirstLastPiecePrio', data=data)
 
     def force_start(self, infohash_list, value=True):
@@ -626,6 +626,6 @@ class Client(object):
         :param infohash_list: Single or list() of infohashes.
         :param value: Force start value (bool)
         """
-        data = self.process_infohash_list(infohash_list)
+        data = self._process_infohash_list(infohash_list)
         data.update({'value': json.dumps(value)})
         return self._post('command/setForceStart', data=data)
