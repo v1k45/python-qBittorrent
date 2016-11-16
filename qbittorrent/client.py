@@ -287,13 +287,13 @@ class Client(object):
         return self._get('sync/maindata', params={'rid': rid})
 
     def download_from_link(self, link,
-                           save_path=None, label=''):
+                           save_path=None, category=''):
         """
         Download torrent using a link.
 
         :param link: URL Link or list of.
         :param save_path: Path to download the torrent.
-        :param label: Label of the torrent(s).
+        :param category: Category of the torrent(s).
 
         :return: Empty JSON data.
         """
@@ -304,7 +304,7 @@ class Client(object):
         if save_path:
             data.update({'savepath': save_path})
         if label:
-            data.update({'label': label})
+            data.update({'category': category})
 
         return self._post('command/download', data=data)
 
