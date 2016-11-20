@@ -147,13 +147,12 @@ class Client(object):
         """
         return self._get('command/shutdown')
 
-    def torrents(self, status='active', label='', sort='priority',
-                 reverse=False, limit=10, offset=0):
+    def torrents(self, **filters):
         """
         Returns a list of torrents matching the supplied filters.
 
-        :param status: Current status of the torrents.
-        :param label: Fetch all torrents with the supplied label.
+        :param filter: Current status of the torrents.
+        :param category: Fetch all torrents with the supplied label.
         :param sort: Sort torrents by.
         :param reverse: Enable reverse sorting.
         :param limit: Limit the number of torrents returned.
@@ -161,20 +160,11 @@ class Client(object):
 
         :return: list() of torrent with matching filter.
         """
-
-        STATUS_LIST = ['all', 'downloading', 'completed',
-                       'paused', 'active', 'inactive']
-        if status not in STATUS_LIST:
-            raise ValueError("Invalid status.")
-
-        params = {
-            'filter': status,
-            'label': label,
-            'sort': sort,
-            'reverse': reverse,
-            'limit': limit,
-            'offset': offset
-        }
+        params = {}
+        for name, value in filters.iteritems():
+            # make sure that old 'status' argument still works
+            name = 'filter' if name == 'status' else name
+            params[name] = value
 
         return self._get('query/torrents', params=params)
 
@@ -286,30 +276,30 @@ class Client(object):
         """
         return self._get('sync/maindata', params={'rid': rid})
 
-    def download_from_link(self, link,
-                           save_path=None, category=''):
+    def download_from_link(self, link, **kwargs):
         """
         Download torrent using a link.
 
         :param link: URL Link or list of.
-        :param save_path: Path to download the torrent.
-        :param category: Category of the torrent(s).
+        :param savepath: Path to download the torrent.
+        :param category: Label or Category of the torrent(s).
 
         :return: Empty JSON data.
         """
-        if not isinstance(link, list):
-            link = [link]
-        data = {'urls': link}
+        # old:new format
+        old_arg_map = {'save_path': 'savepath'}  # , 'label': 'category'}
 
-        if save_path:
-            data.update({'savepath': save_path})
-        if label:
-            data.update({'category': category})
+        # convert old option names to new option names
+        options = kwargs.copy()
+        for old_arg, new_arg in old_arg_map.iteritems():
+            if options.get(old_arg) and not options.get(new_arg):
+                options[new_arg] = options[old_arg]
 
-        return self._post('command/download', data=data)
+        options['urls'] = link
 
-    def download_from_file(self, file_buffer,
-                           save_path=None, label=''):
+        return self._post('command/download', data=options)
+
+    def download_from_file(self, file_buffer, **kwargs):
         """
         Download torrent using a file.
 
@@ -326,12 +316,10 @@ class Client(object):
         else:
             torrent_files = {'torrents': file_buffer}
 
-        data = {}
+        data = kwargs.copy()
 
-        if save_path:
-            data.update({'savepath': save_path})
-        if label:
-            data.update({'label': label})
+        if data.get('save_path'):
+            data.update({'savepath': data['save_path']})
         return self._post('command/upload', data=data, files=torrent_files)
 
     def add_trackers(self, infohash, trackers):
@@ -384,13 +372,23 @@ class Client(object):
     def set_label(self, infohash_list, label):
         """
         Set the label on multiple torrents.
+        IMPORTANT: OLD API method, kept as it is to avoid breaking stuffs.
 
         :param infohash_list: Single or list() of infohashes.
         """
         data = self._process_infohash_list(infohash_list)
         data['label'] = label
-
         return self._post('command/setLabel', data=data)
+
+    def set_category(self, infohash_list, category):
+        """
+        Set the category on multiple torrents.
+
+        :param infohash_list: Single or list() of infohashes.
+        """
+        data = self._process_infohash_list(infohash_list)
+        data['category'] = category
+        return self._post('command/setCategory', data=data)
 
     def resume(self, infohash):
         """
