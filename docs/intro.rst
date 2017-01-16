@@ -50,11 +50,11 @@ Getting torrents
 
 - Filter torrents::
 
-    qb.torrents(status='downloading', label='my label')
+    qb.torrents(filter='downloading', category='my category')
     # This will return all torrents which are currently
-    # downloading and are labeled as ``my label``.
+    # downloading and are categoried as ``my category``.
 
-    qb.torrents(status='paused', sort='ratio')
+    qb.torrents(filter='paused', sort='ratio')
     # This will return all paused torrents sorted by their Leech:Seed ratio.
 
 Refer qBittorents WEB API documentation for all possible filters.
@@ -88,17 +88,17 @@ Downloading torrents
 - Specifing save path for downloads::
 
     dl_path = '/home/user/Downloads/special-dir/'
-    qb.download_from_file(myfile, save_path=dl_path)
+    qb.download_from_file(myfile, savepath=dl_path)
 
     # same for links.
-    qb.download_from_link(my_magnet_uri, save_path=dl_path)
+    qb.download_from_link(my_magnet_uri, savepath=dl_path)
 
 - Applying labels to downloads::
 
     qb.download_from_file(myfile, label='secret-files ;) ')
 
     # same for links.
-    qb.download_from_link(my_magnet_uri, label='anime')
+    qb.download_from_link(my_magnet_uri, category='anime')
 
 Pause / Resume torrents
 -----------------------
