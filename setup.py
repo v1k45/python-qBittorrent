@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 install_requires = open('requirements.txt').read().splitlines()
 
-__version__ = '0.2'
+__version__ = '0.3'
 
 
 def read(fname):
@@ -35,6 +35,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'License :: OSI Approved :: MIT License',
         'Environment :: Console'
     ]
