@@ -161,7 +161,7 @@ class Client(object):
         :return: list() of torrent with matching filter.
         """
         params = {}
-        for name, value in filters.iteritems():
+        for name, value in filters.items():
             # make sure that old 'status' argument still works
             name = 'filter' if name == 'status' else name
             params[name] = value
@@ -291,7 +291,7 @@ class Client(object):
 
         # convert old option names to new option names
         options = kwargs.copy()
-        for old_arg, new_arg in old_arg_map.iteritems():
+        for old_arg, new_arg in old_arg_map.items():
             if options.get(old_arg) and not options.get(new_arg):
                 options[new_arg] = options[old_arg]
 
