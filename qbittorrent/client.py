@@ -297,7 +297,11 @@ class Client(object):
 
         options['urls'] = link
 
-        return self._post('command/download', data=options)
+        # workaround to send multipart/formdata request
+        # http://stackoverflow.com/a/23131823/4726598
+        dummy_file = {'_dummy': (None, '_dummy')}
+
+        return self._post('command/download', data=options, files=dummy_file)
 
     def download_from_file(self, file_buffer, **kwargs):
         """
