@@ -35,7 +35,7 @@ You can also stay on the bleeding edge of the package::
 Prerequisite
 ============
 
-qBittorent webUI must be enabled before using this API client. [How to enable the qBittorrent Web UI](https://github.com/lgallard/qBittorrent-Controller/wiki/How-to-enable-the-qBittorrent-Web-UI).
+qBittorent webUI must be enabled before using this API client. `How to enable the qBittorrent Web UI <https://github.com/lgallard/qBittorrent-Controller/wiki/How-to-enable-the-qBittorrent-Web-UI>`_
 
 Quick usage guide
 =================
