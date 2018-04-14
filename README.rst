@@ -32,6 +32,11 @@ You can also stay on the bleeding edge of the package::
     $ cd python-qBittorrent
     $ python setup.py install
 
+Prerequisite
+============
+
+qBittorent webUI must be enabled before using this API client. [How to enable the qBittorrent Web UI](https://github.com/lgallard/qBittorrent-Controller/wiki/How-to-enable-the-qBittorrent-Web-UI).
+
 Quick usage guide
 =================
 .. code-block:: python
