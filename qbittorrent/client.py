@@ -643,5 +643,5 @@ class Client(object):
         :param value: Save location (string)
         """
         data = self._process_infohash_list(infohash_list)
-        data.update({'location': json.dumps(value)})
+        data.update({'location': json.dumps(save_path)})
         return self._post('command/setLocation', data=data)
