@@ -634,3 +634,14 @@ class Client(object):
         data = self._process_infohash_list(infohash_list)
         data.update({'value': json.dumps(value)})
         return self._post('command/setForceStart', data=data)
+
+    def set_location(self, infohash_list, save_path):
+        """
+        Set selected torrents' save location.
+
+        :param infohash_list: Single or list() of infohashes.
+        :param value: Save location (string)
+        """
+        data = self._process_infohash_list(infohash_list)
+        data.update({'location': json.dumps(value)})
+        return self._post('command/setLocation', data=data)
