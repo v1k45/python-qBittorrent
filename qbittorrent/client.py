@@ -295,10 +295,7 @@ class Client(object):
             if options.get(old_arg) and not options.get(new_arg):
                 options[new_arg] = options[old_arg]
 
-        if type(link) is list:
-            options['urls'] = "\n".join(link)
-        else:
-            options['urls'] = link
+        options['urls'] = link
 
         # workaround to send multipart/formdata request
         # http://stackoverflow.com/a/23131823/4726598
@@ -634,3 +631,18 @@ class Client(object):
         data = self._process_infohash_list(infohash_list)
         data.update({'value': json.dumps(value)})
         return self._post('command/setForceStart', data=data)
+
+    def set_share_ratio(self, infohash_list, ratio_limit, seeding_time_limit):
+        """
+        Set the share ratio limit of the supplied torrents.
+
+        :param infohash_list: Single or list() of infohashes.
+        :param ratio_limit: Ratio limit (optional 2 decimals)
+        :param seeding_time_limit: Time limit in minutes.
+        """
+        data = self._process_infohash_list(infohash_list)
+        data.update({'ratioLimit': ratio_limit,
+                    'seedingTimeLimit': seeding_time_limit})
+        
+        return self._post('api/v2/torrents/setShareLimits', data=data)
+
