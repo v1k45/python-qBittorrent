@@ -708,7 +708,6 @@ class Client(object):
         """
         Get Alternative speed limits. (1/0)
         """
-        # headers = {'content-type': 'application/x-www-form-urlencoded'}
 
         return self._get('transfer/speedLimitsMode')
 
