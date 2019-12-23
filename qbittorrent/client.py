@@ -15,7 +15,7 @@ class Client(object):
         self.url = url + 'api/v2/'
 
         session = requests.Session()
-        check_prefs = session.get(self.url+'app/preferences')
+        check_prefs = session.get(self.url + 'app/preferences')
         if check_prefs.status_code == 200:
             self._is_authenticated = True
             self.session = session
@@ -103,7 +103,7 @@ class Client(object):
         :return: Response to login request to the API.
         """
         self.session = requests.Session()
-        login = self.session.post(self.url+'auth/login',
+        login = self.session.post(self.url + 'auth/login',
                                   data={'username': username,
                                         'password': password})
         if login.text == 'Ok.':
@@ -232,7 +232,6 @@ class Client(object):
         """
         return self._get('torrents/pieceHashes?hash=' + infohash.lower())
 
-
     @property
     def global_transfer_info(self):
         """
@@ -284,7 +283,7 @@ class Client(object):
             """
 
             def __init__(self, url, prefs, auth, session):
-                super(Proxy, self).__init__(url)
+                self.url = url
                 self.prefs = prefs
                 self._is_authenticated = auth
                 self.session = session
@@ -318,7 +317,8 @@ class Client(object):
         :param infohash: INFO HASH of torrent.
         :param rid: Response ID of last request.
         """
-        return self._get('sync/torrentPeers', params={'hash': infohash.lower(), 'rid': rid})
+        params = {'hash': infohash.lower(), 'rid': rid}
+        return self._get('sync/torrentPeers', params=params)
 
     def download_from_link(self, link, **kwargs):
         """
@@ -339,7 +339,10 @@ class Client(object):
             if options.get(old_arg) and not options.get(new_arg):
                 options[new_arg] = options[old_arg]
 
-        options['urls'] = link
+        if isinstance(link, list):
+            options['urls'] = "\n".join(link)
+        else:
+            options['urls'] = link
 
         # workaround to send multipart/formdata request
         # http://stackoverflow.com/a/23131823/4726598
@@ -497,29 +500,41 @@ class Client(object):
 
     def delete(self, infohash_list):
         """
-        Delete torrents.
+        Delete torrents. Does not remove files.
 
         :param infohash_list: Single or list() of infohashes.
         """
-        data = self._process_infohash_list(infohash_list)
-        data['deleteFiles'] = 'false'
-        return self._post('torrents/delete', data=data)
+        return self._delete(infohash_list)
 
     def delete_all(self):
         """
-        Delete all torrents.
-
+        Delete all torrents. Does not remove files.
         """
-        return self._post('torrents/delete', data={'hashes': 'all'})
+        return self._delete('all')
 
     def delete_permanently(self, infohash_list):
         """
-        Permanently delete torrents.
+        Permanently delete torrents. Removes files.
 
         :param infohash_list: Single or list() of infohashes.
         """
+        return self._delete(infohash_list, True)
+
+    def delete_all_permanently(self):
+        """
+        Permanently delete torrents.
+        """
+        return self._delete('all', True)
+
+    def _delete(self, infohash_list, delete_files=False):
+        """
+        Delete torrents.
+
+        :param infohash_list: Single or list() of infohashes.
+        :param delete_files: Whether to delete files along with torrent.
+        """
         data = self._process_infohash_list(infohash_list)
-        data['deleteFiles'] = 'true'
+        data['deleteFiles'] = json.dumps(delete_files)
         return self._post('torrents/delete', data=data)
 
     def recheck(self, infohash_list):
