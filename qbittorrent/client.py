@@ -752,12 +752,12 @@ class Client(object):
         data = self._process_infohash_list(infohash_list)
         return self._post('torrents/toggleFirstLastPiecePrio', data=data)
 
-    def force_start(self, infohash_list, value=False):
+    def force_start(self, infohash_list, value):
         """
         Force start selected torrents.
 
         :param infohash_list: Single or list() of infohashes; pass 'all' for all torrents.
-        :param value: Force start value (bool), default is false
+        :param value: Force start value (bool)
         """
         data = self._process_infohash_list(infohash_list)
         data.update({'value': json.dumps(value)})
