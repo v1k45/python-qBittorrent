@@ -763,12 +763,12 @@ class Client(object):
         data.update({'value': json.dumps(value)})
         return self._post('torrents/setForceStart', data=data)
 
-    def set_super_seeding(self, infohash_list, value=False):
+    def set_super_seeding(self, infohash_list, value):
         """
         Set super seeding for selected torrents.
 
         :param infohash_list: Single or list() of infohashes; pass 'all' for all torrents.
-        :param value: Force start value (bool), default is false
+        :param value: Force start value (bool)
         """
         data = self._process_infohash_list(infohash_list)
         data.update({'value': json.dumps(value)})
