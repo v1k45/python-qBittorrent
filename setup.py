@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 install_requires = open('requirements.txt').read().splitlines()
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 
 def read(fname):
