@@ -38,6 +38,16 @@ Quick usage guide
     for torrent in torrents:
         print torrent['name']
 
+
+If you have enabled SSL and are using a self-signed certificate, you'd probably want to disable SSL verification. This can be done by passing `verify=False` while initializing the `Client`.
+
+.. code-block:: python
+
+    from qbittorrent import Client
+
+    qb = Client('https://127.0.0.1:8080/', verify=False)
+
+
 Overview of API methods
 =======================
 
