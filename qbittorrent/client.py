@@ -9,22 +9,27 @@ class LoginRequired(Exception):
 
 class Client(object):
     """class to interact with qBittorrent WEB API"""
-    def __init__(self, url, verify=True):
+    def __init__(self, url, verify=True, timeout=None):
         """
         Initialize the client
 
         :param url: Base URL of the qBittorrent WEB API
         :param verify: Boolean to specify if SSL verification should be done.
-                       Defaults to True.
+                       Defaults to True. 
+        :param timeout: How many seconds to wait for the server to send data
+                        before giving up, as a float, or a
+                        `(connect timeout, read timeout)` tuple.
+                       Defaults to None.
         """
         if not url.endswith('/'):
             url += '/'
         self.url = url + 'api/v2/'
         self.verify = verify
+        self.timeout = timeout
 
         session = requests.Session()
         prefs_url = self.url + 'app/preferences'
-        check_prefs = session.get(prefs_url, verify=self.verify)
+        check_prefs = session.get(prefs_url, verify=self.verify, timeout=self.timeout)
         if check_prefs.status_code == 200:
             self._is_authenticated = True
             self.session = session
@@ -80,6 +85,7 @@ class Client(object):
             raise LoginRequired
 
         kwargs['verify'] = self.verify
+        kwargs['timeout'] = self.timeout
         if method == 'get':
             request = self.session.get(final_url, **kwargs)
         else:
