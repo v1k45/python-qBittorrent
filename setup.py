@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 install_requires = open('requirements.txt').read().splitlines()
 
-__version__ = '0.3.1'
+__version__ = '0.4.2'
 
 
 def read(fname):
@@ -15,7 +15,7 @@ def read(fname):
 
 setup(
     name='python-qbittorrent',
-    description='Python wrapper for qBittorrent >3.1.x',
+    description='Python wrapper for qBittorrent >4.1.x',
     version=__version__,
     long_description=read('README.rst'),
     license='The MIT License',

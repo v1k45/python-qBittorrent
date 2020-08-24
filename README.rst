@@ -9,11 +9,11 @@ python-qBittorrent
 .. image:: https://badge.fury.io/py/python-qbittorrent.svg
    :target: https://badge.fury.io/py/python-qbittorrent
 
-Python wrapper for qBittorrent Web API (for versions above v3.1.x).
+Python wrapper for qBittorrent Web API (for versions above 4.1, for version below and above v3.1.x please use 0.3.1 version).
 
 For qBittorrent clients with earlier versions, use *mookfist's* `python-qbittorrent <https://github.com/mookfist/python-qbittorrent>`__.
 
-This wrapper is based on the methods described in `qBittorrent's Official Web API Documentation <https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-Documentation>`__
+This wrapper is based on the methods described in `qBittorrent's Official Web API Documentation <https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation>`__
 
 Some methods are only supported in qBittorent's latest version (v3.3.1 when writing).
 
@@ -54,6 +54,16 @@ Quick usage guide
 
     for torrent in torrents:
         print torrent['name']
+
+
+If you have enabled SSL and are using a self-signed certificate, you'd probably want to disable SSL verification. This can be done by passing `verify=False` while initializing the `Client`.
+
+.. code-block:: python
+
+    from qbittorrent import Client
+
+    qb = Client('https://127.0.0.1:8080/', verify=False)
+
 
 API methods
 ===========
@@ -162,6 +172,7 @@ Contributors
 - `Matt Smith (psykzz) <https://github.com/psykzz>`__
 - `Nicolas Wright (dozedoff) <https://github.com/dozedoff>`__
 - `sbivol <https://github.com/sbivol>`__
+- `Christophe Ha (Shaance) <https://github.com/Shaance>`__
 - Your name here :)
 
 TODO
