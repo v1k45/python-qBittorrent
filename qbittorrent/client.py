@@ -404,7 +404,10 @@ class Client(object):
         """
         data = self._process_infohash_list(infohash_list)
         data['location'] = location
-        return self._post('torrents/setLocation', data=data)
+        # workaround to send multipart/formdata request
+        # http://stackoverflow.com/a/23131823/4726598
+        dummy_file = {'_dummy': (None, '_dummy')}
+        return self._post('torrents/setLocation', data=data, files=dummy_file)
 
     def set_torrent_name(self, infohash, name):
         """
