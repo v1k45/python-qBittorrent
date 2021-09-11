@@ -490,7 +490,7 @@ class Client(object):
         """
         Remove categories
 
-        :param categories: can contain multiple cateogies separated by \n (%0A urlencoded).
+        :param categories: can contain multiple cateogies separated by `\n` (%0A urlencoded).
         """
 
         return self._post('torrents/removeCategories', data={'categories': categories})
