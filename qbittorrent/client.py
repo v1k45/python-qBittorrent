@@ -395,6 +395,16 @@ class Client(object):
                 'urls': trackers}
         return self._post('torrents/addTrackers', data=data)
 
+    def remove_trackers(self, infohash, urls):
+        """
+        Remove trackers
+
+        :param infohash: INFO HASH of torrent.
+        :param urls: URLs to remove, separated by `|`.
+        """
+
+        return self._post('torrents/removeTrackers', data={'hash': infohash, 'urls': urls})
+
     def set_torrent_location(self, infohash_list, location):
         """
         Set the location for the torrent
