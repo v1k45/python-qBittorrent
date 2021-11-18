@@ -615,9 +615,8 @@ class Client(object):
         :param infohash: INFO HASH of torrent.
         :param file_id: ID of the file to set priority.
         :param priority: Priority level of the file.
-        :note priority 4 is no priority set
         """
-        if priority not in [0, 1, 2, 4, 7]:
+        if priority not in [0, 1, 6, 7]:
             raise ValueError("Invalid priority, refer WEB-UI docs for info.")
         elif not isinstance(file_id, int):
             raise TypeError("File ID must be an int")
