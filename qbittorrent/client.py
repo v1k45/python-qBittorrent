@@ -617,7 +617,9 @@ class Client(object):
         :param priority: Priority level of the file.
         :note priority 4 is no priority set
         """
-        if not isinstance(file_id, int):
+        if priority not in [0, 1, 2, 4, 7]:
+            raise ValueError("Invalid priority, refer WEB-UI docs for info.")
+        elif not isinstance(file_id, int):
             raise TypeError("File ID must be an int")
 
         data = {'hash': infohash.lower(),
