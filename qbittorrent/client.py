@@ -1,3 +1,4 @@
+from time import sleep
 import requests
 import json
 
@@ -9,13 +10,14 @@ class LoginRequired(Exception):
 
 class Client(object):
     """class to interact with qBittorrent WEB API"""
+
     def __init__(self, url, verify=True, timeout=None):
         """
         Initialize the client
 
         :param url: Base URL of the qBittorrent WEB API
         :param verify: Boolean to specify if SSL verification should be done.
-                       Defaults to True. 
+                       Defaults to True.
         :param timeout: How many seconds to wait for the server to send data
                         before giving up, as a float, or a
                         `(connect timeout, read timeout)` tuple.
@@ -29,7 +31,8 @@ class Client(object):
 
         session = requests.Session()
         prefs_url = self.url + 'app/preferences'
-        check_prefs = session.get(prefs_url, verify=self.verify, timeout=self.timeout)
+        check_prefs = session.get(
+            prefs_url, verify=self.verify, timeout=self.timeout)
         if check_prefs.status_code == 200:
             self._is_authenticated = True
             self.session = session
@@ -621,7 +624,7 @@ class Client(object):
         :param infohash: INFO HASH of torrent.
         :param file_id: ID of the file to set priority.
         :param priority: Priority level of the file.
-        
+
         :note Priorities Don't download, Normal, High, Maximum
         in 3.2.0-4.1+ are 0, 1, 6, 7 and in 3.1.x are 0, 1, 2, 7
         """
@@ -791,3 +794,53 @@ class Client(object):
         data = self._process_infohash_list(infohash_list)
         data.update({'value': json.dumps(value)})
         return self._post('torrents/setSuperSeeding', data=data)
+
+    def search(self, name, plugin="all", limit=500, offset=0):
+        """
+        Search for a torrent with the builtin search engine.
+
+        :param name: name of torrent searched -> string.
+        :param plugin: plugin used (default all, enabled for all the active ones) -> string.
+        :param limit: result limit to return (default 500) -> int.
+        :param offset: offset (default 0) -> int.
+        """
+
+        id = self._post(
+            'search/start', {'pattern': name, 'category': 'all', 'plugins': plugin})
+
+        # Wait while the search is running
+        while self._post('search/results',
+                         {'id': id['id'],
+                          'limit': str(limit),
+                          'offset': str(offset)})['status'] == "Running":
+            sleep(0.5)
+
+        # When finished return the results
+        return self._post('search/results', {'id': id['id'], 'limit': str(limit), 'offset': str(offset)})
+
+    def list_search_plugins(self):
+        return self._get('search/plugins')
+
+    def add_search_plugin(self, url):
+        """
+        Add search plugin.
+
+        :param url: url of the raw file (see https://github.com/qbittorrent/search-plugins/wiki/Unofficial-search-plugins for precisions)
+        """
+        return self._post('search/installPlugin', {'sources': url})
+
+    def disable_search_plugin(self, name):
+        """
+        Disable a specific search plugin.
+
+        :param name: plugin name.
+        """
+
+        return self._post('search/enablePlugin', {'names': name, 'enable': 'false'})
+
+    def enable_search_plugin(self, name):
+        """
+        Enable a specific search plugin.
+        """
+
+        return self._post('search/enablePlugin', {'names': name, 'enable': 'true'})
