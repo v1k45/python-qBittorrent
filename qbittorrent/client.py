@@ -791,3 +791,17 @@ class Client(object):
         data = self._process_infohash_list(infohash_list)
         data.update({'value': json.dumps(value)})
         return self._post('torrents/setSuperSeeding', data=data)
+    
+    def set_share_ratio(self, infohash_list, ratio_limit, seeding_time_limit):
+        """
+        Set the share ratio limit of the supplied torrents.
+        
+        :param infohash_list: Single or list() of infohashes; pass 'all' for all torrents.
+        :param ratio_limit: Ratio limit (optional 2 decimals). -2 for global limit, -1 for no limit.
+        :param seeding_time_limit: Time limit in minutes. -2 for global limit, -1 for no limit.
+        """
+        data = self._process_infohash_list(infohash_list)
+        data.update({'ratioLimit': ratio_limit,
+                    'seedingTimeLimit': seeding_time_limit})
+
+        return self._post('torrents/setShareLimits', data=data)
