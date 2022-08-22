@@ -636,6 +636,31 @@ class Client(object):
 
         return self._post('torrents/filePrio', data=data)
 
+    def set_multi_file_priority(self, infohash, file_id_list, priority):
+        """
+        Set files of a torrent to a supplied priority level.
+        If your torrent has lots of files(100+) this method is faster.
+
+        :param infohash: INFO HASH of torrent.
+        :param file_id_list: IDs of the file in a list, to set priority.
+        :param priority: Priority level of the file.
+
+        :note Priorities Don't download, Normal, High, Maximum
+        in 3.2.0-4.1+ are 0, 1, 6, 7 and in 3.1.x are 0, 1, 2, 7
+        """
+        if priority not in [0, 1, 2, 4, 7]:
+            raise ValueError("Invalid priority, refer WEB-UI docs for info.")
+        elif not isinstance(file_id_list, list):
+            raise TypeError("File IDs must be in a list")
+
+        file_id_string_list = [str(i) for i in file_id_list]
+        file_ids = "|".join(file_id_string_list)
+        data = {'hash': infohash.lower(),
+                'id': file_ids,
+                'priority': priority}
+
+        return self._post('torrents/filePrio', data=data)
+
     def set_automatic_torrent_management(self, infohash_list, enable='false'):
         """
         Set the category on multiple torrents.
