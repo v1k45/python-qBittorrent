@@ -9,6 +9,7 @@ class LoginRequired(Exception):
 
 class Client(object):
     """class to interact with qBittorrent WEB API"""
+
     def __init__(self, url, verify=True, timeout=None):
         """
         Initialize the client
@@ -621,7 +622,7 @@ class Client(object):
         :param infohash: INFO HASH of torrent.
         :param file_id: ID of the file to set priority.
         :param priority: Priority level of the file.
-        
+
         :note Priorities Don't download, Normal, High, Maximum
         in 3.2.0-4.1+ are 0, 1, 6, 7 and in 3.1.x are 0, 1, 2, 7
         """
@@ -750,7 +751,7 @@ class Client(object):
         """
         Toggle alternative speed limits.
         """
-        return self._get('transfer/toggleSpeedLimitsMode')
+        return self._post('transfer/toggleSpeedLimitsMode', data={})
 
     def toggle_sequential_download(self, infohash_list):
         """
