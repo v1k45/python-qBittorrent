@@ -423,6 +423,20 @@ class Client(object):
                 'name': name}
         return self._post('torrents/rename', data=data)
 
+    def set_file_name(self, infohash, oldPath, newPath):
+        """
+        Set the name for a file of the torrent.
+        
+        :param infohash: INFO HASH of torrent
+        :param oldPath: TORRENTNAME/oldfilename (example)
+        :param newPath: TORRENTNAME/newfilename        
+        """
+        data = {'hash': infohash.lower(),
+                "oldPath": oldPath,
+                "newPath": newPath
+        }
+        return self._post("torrents/renameFile", data=data)
+
     @staticmethod
     def _process_infohash_list(infohash_list):
         """
