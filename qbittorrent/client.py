@@ -423,6 +423,9 @@ class Client(object):
                 'name': name}
         return self._post('torrents/rename', data=data)
 
+
+
+
     def set_file_name(self, infohash, oldPath, newPath):
         """
         Set the name for a file of the torrent.
@@ -435,7 +438,21 @@ class Client(object):
                 "oldPath": oldPath,
                 "newPath": newPath
         }
+        print(data)
         return self._post("torrents/renameFile", data=data)
+
+    def delete(self, infohash, deleteFiles=bool()):
+        """
+        Deletes the torrent using its infohash
+        
+        :param infohash: INFO HASH of torrent
+        :param deleteFiles (bool): whether or not the downloaded files should also be deleted; if True, it does
+        """
+        data = {'hash': infohash.lower(),
+                "deleteFiles": deleteFiles
+        }
+        print(data)
+        return self._post("torrents/delete", data=data)
 
     @staticmethod
     def _process_infohash_list(infohash_list):
