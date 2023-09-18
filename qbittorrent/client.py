@@ -1,49 +1,94 @@
-import requests
+
+# Built-in Imports
 import json
 
+# 3rd Party Imports
+import requests
 
-class LoginRequired(Exception):
-    def __str__(self):
-        return 'Please login first.'
+# Local Imports
+from qbittorrent.exceptions import LoginRequired, WrongCredentials
 
 
-class Client(object):
+class Client:
     """class to interact with qBittorrent WEB API"""
-    def __init__(self, url, verify=True, timeout=None):
+
+    def __init__(self, url: str, username: str, password: str, verify: bool = True, timeout: bool = None):
         """
         Initialize the client
 
         :param url: Base URL of the qBittorrent WEB API
+        :param username: Username to use for login
+        :param password: Password to use for login
         :param verify: Boolean to specify if SSL verification should be done.
-                       Defaults to True. 
+                       Defaults to True.
         :param timeout: How many seconds to wait for the server to send data
                         before giving up, as a float, or a
                         `(connect timeout, read timeout)` tuple.
                        Defaults to None.
         """
+        self._username = username
+        self._password = password
+
         if not url.endswith('/'):
             url += '/'
+
         self.url = url + 'api/v2/'
         self.verify = verify
         self.timeout = timeout
 
-        session = requests.Session()
-        prefs_url = self.url + 'app/preferences'
-        check_prefs = session.get(prefs_url, verify=self.verify, timeout=self.timeout)
-        if check_prefs.status_code == 200:
-            self._is_authenticated = True
-            self.session = session
+        self.session = None
+        self._is_authenticated = False
 
-        elif check_prefs.status_code == 404:
-            self._is_authenticated = False
-            raise RuntimeError("""
-                This wrapper only supports qBittorrent applications
-                 with version higher than 4.1.x.
-                 Please use the latest qBittorrent release.
-                """)
+        # Create session & login
+        self.login()
 
-        else:
-            self._is_authenticated = False
+    @property
+    def username(self) -> str:
+        return self._username
+
+    @username.setter
+    def username(self, value: str):
+        """
+        Updates the username and attempts to re-login
+
+        :param value:
+        :raises WrongCredentials: If the username & password combination are wrong
+        :return:
+        """
+        self._username = value
+        self.login()
+
+    @property
+    def password(self) -> str:
+        return self._password
+
+    @password.setter
+    def password(self, value: str):
+        """
+        Updates the password and attempts to re-login
+
+        :param value:
+        :raises WrongCredentials: If the username & password combination are wrong
+        :return:
+        """
+        self._password = value
+        self.login()
+
+    def update_credentials(self, username: str, password: str):
+        """
+        In case you need to update both username and password you can use this function instead of the property
+        setters. It will attempt to log in after changes are made.
+
+        This should avoid raising WrongCredentials when both credentials change.
+
+        :param username:
+        :param password:
+        :raises WrongCredentials: If the username & password combination are wrong
+        :return:
+        """
+        self._username = username
+        self._password = password
+        self.login()
 
     def _get(self, endpoint, **kwargs):
         """
@@ -91,6 +136,10 @@ class Client(object):
         else:
             request = self.session.post(final_url, data, **kwargs)
 
+        if request.status_code == 403:
+            self.login()
+            return self._request()
+
         request.raise_for_status()
         request.encoding = 'utf_8'
 
@@ -104,7 +153,7 @@ class Client(object):
 
         return data
 
-    def login(self, username='admin', password='admin'):
+    def login(self):
         """
         Method to authenticate the qBittorrent Client.
 
@@ -112,20 +161,20 @@ class Client(object):
         stores the authenticated session if the login is correct.
         Else, shows the login error.
 
-        :param username: Username.
-        :param password: Password.
-
-        :return: Response to login request to the API.
+        :raises WrongCredentials: When given credentials are wrong
+        :return:
         """
         self.session = requests.Session()
+
         login = self.session.post(self.url + 'auth/login',
-                                  data={'username': username,
-                                        'password': password},
+                                  data={'username': self.username,
+                                        'password': self.password},
                                   verify=self.verify)
         if login.text == 'Ok.':
             self._is_authenticated = True
-        else:
-            return login.text
+            return
+
+        raise WrongCredentials
 
     def logout(self):
         """
@@ -621,7 +670,7 @@ class Client(object):
         :param infohash: INFO HASH of torrent.
         :param file_id: ID of the file to set priority.
         :param priority: Priority level of the file.
-        
+
         :note Priorities Don't download, Normal, High, Maximum
         in 3.2.0-4.1+ are 0, 1, 6, 7 and in 3.1.x are 0, 1, 2, 7
         """
