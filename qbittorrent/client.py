@@ -12,13 +12,13 @@ class Client:
     """Class to interact with qBittorrent WEB API"""
 
     def __init__(
-        self,
-        url: str,
-        username: str,
-        password: str,
-        verify: bool = True,
-        timeout: bool = None,
-        max_attempts_on_403: int = 3,
+            self,
+            url: str,
+            username: str,
+            password: str,
+            verify: bool = True,
+            timeout: bool = None,
+            max_attempts_on_403: int = 3,
     ):
         """
         Initialize the client
@@ -28,11 +28,11 @@ class Client:
         :param password: Password to use for login
         :param verify: Boolean to specify if SSL verification should be done.
                        Defaults to True.
-        :param timeout: How many seconds to wait for the server to send data
-                        before giving up, as a float, or a
-                        `(connect timeout, read timeout)` tuple.
-                       Defaults to None.
-        :param max_attempts_on_403: Maximum time a request will be done after a 403 and a re-login before raising HTTPError
+        :param timeout: How many seconds to wait for the server to send data before giving up, as a float,
+                        or a `(connect timeout, read timeout)` tuple.
+                        Defaults to None.
+        :param max_attempts_on_403: Maximum time a request will be done after a 403 and a re-login before
+                                    raising HTTPError
         """
         self._username = username
         self._password = password
@@ -40,11 +40,13 @@ class Client:
         if not url.endswith("/"):
             url += "/"
 
-        self.url = url + "api/v2/"
-        self.verify = verify
-        self.timeout = timeout
+        self._url = url + "api/v2/"
+        self._verify = verify
+        self._timeout = timeout
 
-        self.session = None
+        self._max_attempts_on_403 = max_attempts_on_403
+
+        self._session = None
         self._is_authenticated = False
 
         # Create session & login
@@ -130,36 +132,36 @@ class Client:
         :param data: POST DATA for the request.
         :param attempt: Attempts to retry this request after 403 and login
                         Used to limit the amount of retries
-        :param kwargs: Other keyword arguments.
+        :param kwargs: Other keyword arguments. Passed down to request
 
         :return: Response for the request.
         """
-        final_url = self.url + endpoint
+        final_url = self._url + endpoint
 
         if not self._is_authenticated:
             raise LoginRequired
 
-        kwargs["verify"] = self.verify
-        kwargs["timeout"] = self.timeout
+        kwargs["verify"] = self._verify
+        kwargs["timeout"] = self._timeout
         if method == "get":
-            request = self.session.get(final_url, **kwargs)
+            request = self._session.get(final_url, **kwargs)
         else:
-            request = self.session.post(final_url, data, **kwargs)
+            request = self._session.post(final_url, data, **kwargs)
 
-        if request.status_code == 403:
+        if request.status_code == 403 and attempt <= self._max_attempts_on_403:
             self.login()
-            return self._request(endpoint, method, data, **kwargs)
+            return self._request(endpoint, method, data, attempt=attempt + 1, **kwargs)
 
         request.raise_for_status()
         request.encoding = "utf_8"
 
         if len(request.text) == 0:
-            data = json.loads("{}")
-        else:
-            try:
-                data = json.loads(request.text)
-            except ValueError:
-                data = request.text
+            return json.loads("{}")
+
+        try:
+            data = json.loads(request.text)
+        except ValueError:
+            data = request.text
 
         return data
 
@@ -174,12 +176,12 @@ class Client:
         :raises WrongCredentials: When given credentials are wrong
         :return:
         """
-        self.session = requests.Session()
+        self._session = requests.Session()
 
-        login = self.session.post(
-            self.url + "auth/login",
+        login = self._session.post(
+            self._url + "auth/login",
             data={"username": self.username, "password": self.password},
-            verify=self.verify,
+            verify=self._verify,
         )
         if login.text == "Ok.":
             self._is_authenticated = True
@@ -374,7 +376,7 @@ class Client:
             def __call__(self):
                 return self.prefs
 
-        return Proxy(self.url, prefs, self._is_authenticated, self.session)
+        return Proxy(self._url, prefs, self._is_authenticated, self._session)
 
     def sync_main_data(self, rid=0):
         """
