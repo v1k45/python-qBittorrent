@@ -545,9 +545,7 @@ class Client:
         Create a new category
         :param category: category to create
         """
-        return self._post(
-            "torrents/createCategory", data={"category": category.lower()}
-        )
+        return self._post("torrents/createCategory", data={"category": category.lower()})
 
     def remove_category(self, categories):
         """
@@ -728,9 +726,7 @@ class Client:
         """
         return self._post("transfer/setDownloadLimit", data={"limit": limit})
 
-    global_download_limit = property(
-        get_global_download_limit, set_global_download_limit
-    )
+    global_download_limit = property(get_global_download_limit, set_global_download_limit)
 
     def get_global_upload_limit(self):
         """
