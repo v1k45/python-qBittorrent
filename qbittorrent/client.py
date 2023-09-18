@@ -1,5 +1,6 @@
 # Built-in Imports
 import json
+from typing import Optional
 
 # 3rd Party Imports
 import requests
@@ -12,13 +13,13 @@ class Client:
     """Class to interact with qBittorrent WEB API"""
 
     def __init__(
-            self,
-            url: str,
-            username: str,
-            password: str,
-            verify: bool = True,
-            timeout: bool = None,
-            max_attempts_on_403: int = 3,
+        self,
+        url: str,
+        username: str,
+        password: str,
+        verify: bool = True,
+        timeout: bool = None,
+        max_attempts_on_403: int = 3,
     ):
         """
         Initialize the client
@@ -149,6 +150,7 @@ class Client:
             request = self._session.post(final_url, data, **kwargs)
 
         if request.status_code == 403 and attempt <= self._max_attempts_on_403:
+            self._is_authenticated = False
             self.login()
             return self._request(endpoint, method, data, attempt=attempt + 1, **kwargs)
 
@@ -189,10 +191,13 @@ class Client:
 
         raise WrongCredentials
 
-    def logout(self):
+    def logout(self) -> Optional[requests.Response]:
         """
         Logout the current session.
         """
+        if not self._is_authenticated:
+            return
+
         response = self._get("auth/logout")
         self._is_authenticated = False
         return response
