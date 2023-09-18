@@ -10,7 +10,7 @@ from qbittorrent.exceptions import LoginRequired, WrongCredentials
 
 
 class Client:
-    """class to interact with qBittorrent WEB API"""
+    """Class to interact with qBittorrent WEB API"""
 
     def __init__(self, url: str, username: str, password: str, verify: bool = True, timeout: bool = None):
         """
@@ -115,7 +115,7 @@ class Client:
 
     def _request(self, endpoint, method, data=None, **kwargs):
         """
-        Method to hanle both GET and POST requests.
+        Method to handle both GET and POST requests.
 
         :param endpoint: Endpoint of the API.
         :param method: Method of HTTP request.
