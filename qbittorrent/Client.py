@@ -6,7 +6,7 @@ from typing import Optional
 import requests
 
 # Local Imports
-from qbittorrent.exceptions import LoginRequired, WrongCredentials
+from qbittorrent.Exceptions import WrongCredentials
 
 
 class Client:
@@ -85,6 +85,20 @@ class Client:
         self._password = value
         self.login()
 
+    @property
+    def qbittorrent_version(self):
+        """
+        Get qBittorrent version.
+        """
+        return self._get("app/version")
+
+    @property
+    def api_version(self):
+        """
+        Get WEB API version.
+        """
+        return self._get("app/webapiVersion")
+
     def update_credentials(self, username: str, password: str):
         """
         In case you need to update both username and password you can use this function instead of the property
@@ -139,9 +153,6 @@ class Client:
         """
         final_url = self._url + endpoint
 
-        if not self._is_authenticated:
-            raise LoginRequired
-
         kwargs["verify"] = self._verify
         kwargs["timeout"] = self._timeout
         if method == "get":
@@ -150,7 +161,6 @@ class Client:
             request = self._session.post(final_url, data, **kwargs)
 
         if request.status_code == 403 and attempt <= self._max_attempts_on_403:
-            self._is_authenticated = False
             self.login()
             return self._request(endpoint, method, data, attempt=attempt + 1, **kwargs)
 
@@ -186,7 +196,6 @@ class Client:
             verify=self._verify,
         )
         if login.text == "Ok.":
-            self._is_authenticated = True
             return
 
         raise WrongCredentials
@@ -195,26 +204,8 @@ class Client:
         """
         Logout the current session.
         """
-        if not self._is_authenticated:
-            return
-
         response = self._get("auth/logout")
-        self._is_authenticated = False
         return response
-
-    @property
-    def qbittorrent_version(self):
-        """
-        Get qBittorrent version.
-        """
-        return self._get("app/version")
-
-    @property
-    def api_version(self):
-        """
-        Get WEB API version.
-        """
-        return self._get("app/webapiVersion")
 
     def shutdown(self):
         """
@@ -332,7 +323,7 @@ class Client:
         see ``set_preferences`` method.
 
         Note: Even if this is a ``property``,
-        to fetch the current preferences dict, you are required
+        to fetch the current preferences' dict, you are required
         to call it like a bound method.
 
         Wrong::
@@ -348,7 +339,7 @@ class Client:
 
         class Proxy(Client):
             """
-            Proxy class to to allow assignment of individual preferences.
+            Proxy class to allow assignment of individual preferences.
             this class overrides some methods to ease things.
 
             Because of this, settings can be assigned like::
