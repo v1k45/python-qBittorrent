@@ -801,7 +801,7 @@ class Client:
         """
         Toggle alternative speed limits.
         """
-        return self._post("transfer/toggleSpeedLimitsMode")
+        return self._post("transfer/toggleSpeedLimitsMode", data={})
 
     def toggle_sequential_download(self, infohash_list):
         """
