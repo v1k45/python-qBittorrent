@@ -50,7 +50,7 @@ qb.login('admin', 'your-secret-password')
 torrents = qb.torrents()
 
 for torrent in torrents:
-    print torrent['name']
+    print(torrent['name'])
 ```
 
 If you have enabled SSL and are using a self-signed certificate, you\'d
